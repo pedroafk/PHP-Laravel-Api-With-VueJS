@@ -13,11 +13,11 @@ Route::post('api/reservations', [ReservationController::class, 'store']);
 Route::put('api/reservations/{id}', [ReservationController::class, 'update']);
 Route::delete('api/reservations/{id}', [ReservationController::class, 'destroy']);
 
-// Rota do front
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome'); // Carrega o arquivo welcome.blade.php
 });
 
 Route::get('/reservations', function () {
-    return view('reservations');
+    return view('reservations'); // Crie um arquivo reservations.blade.php a seguir
 });

@@ -1,4 +1,6 @@
 import { createApp } from 'vue';
-import App from './components/App.vue';
+import ReservationsTable from './components/ReservationsTable.vue';
 
-createApp(App).mount('#app');
+
+const app = createApp(ReservationsTable);
+app.mount('#app');

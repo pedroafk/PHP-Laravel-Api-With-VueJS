@@ -13,7 +13,11 @@ Route::post('api/reservations', [ReservationController::class, 'store']);
 Route::put('api/reservations/{id}', [ReservationController::class, 'update']);
 Route::delete('api/reservations/{id}', [ReservationController::class, 'destroy']);
 
-// Rota base
+// Rota do front
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/reservations', function () {
+    return view('reservations');
 });

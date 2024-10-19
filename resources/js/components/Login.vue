@@ -51,10 +51,12 @@ export default {
                     email: this.email,
                     password: this.password
                 });
+                // Armazenar token no localStorage (ou sessionStorage)
+                localStorage.setItem('authToken', response.data.token); // Supondo que você retorne um token no login
                 console.log(response.data.message);
-                // Redirecionar ou realizar ações após login bem-sucedido
+                this.$router.push('/reservations'); // Redireciona para a página de reservas
             } catch (error) {
-                this.errorMessage = error.response.data.message || 'Erro ao fazer login';
+                this.errorMessage = error.response?.data.message || 'Erro ao fazer login';
             }
         }
     }

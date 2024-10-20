@@ -5,7 +5,8 @@
 
         <div v-if="showForm" class="mb-4 p-4 border border-gray-300 rounded">
             <h3 class="text-lg font-semibold mb-2">Add New Reservation</h3>
-            <form @submit.prevent="addReservation">
+            <form @submit.prevent="addReservation" method="POST">
+                @csrf
                 <div class="mb-2">
                     <label for="name" class="block">Name:</label>
                     <input type="text" v-model="newReservation.name" required class="border rounded w-full py-2 px-3">
@@ -66,11 +67,11 @@ export default {
             showForm: false,
             csrfToken: '',
             newReservation: {
-                name: '',
-                email: '',
-                date: '',
-                time: '',
-                number_of_guests: '',
+                name: 'teste',
+                email: 'teste@gmail.com',
+                date: '2024-10-18',
+                time: '12:00:00',
+                number_of_guests: '2',
             },
         };
     },
@@ -82,9 +83,10 @@ export default {
         async fetchCsrfToken() {
             try {
                 const response = await axios.get('http://localhost:8000/api/csrf-token', {
-                   withCredentials: true, 
+                    withCredentials: true,
                 });
                 this.csrfToken = response.data.csrf_token;
+                console.log('CSRF Token:', this.csrfToken); // Log do CSRF Token
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
             }
@@ -92,16 +94,22 @@ export default {
 
         async fetchReservations() {
             try {
-                const response = await axios.get('/api/reservations');
+                const response = await axios.get('/api/reservations',{
+                    withCredentials: true
+                });
                 this.reservations = response.data;
+                console.log('Fetched reservations:', this.reservations); // Log das reservas
             } catch (error) {
                 console.error('Error fetching reservations:', error);
             }
         },
 
         async addReservation() {
+            console.log('Adding reservation...');
+
             try {
                 if (!this.csrfToken) {
+                    console.log('CSRF token is missing, fetching...'); // Log se o CSRF Token não estiver disponível
                     await this.fetchCsrfToken();
                 }
 
@@ -114,6 +122,8 @@ export default {
                     withCredentials: true,
                 });
 
+                console.log('Response:', response); // Log da resposta
+
                 if (response.status === 200) {
                     this.newReservation = { name: '', email: '', date: '', time: '', number_of_guests: '' };
                     this.showForm = false;
@@ -122,13 +132,12 @@ export default {
                     console.error('Failed to add reservation:', response.statusText);
                 }
             } catch (error) {
-                console.error('Error adding reservation:', error);
+                console.log('Full error object:', error); // Log do objeto de erro completo
             }
         }
     },
 };
 </script>
-
 
 <style scoped>
 </style>

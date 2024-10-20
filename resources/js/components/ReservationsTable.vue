@@ -57,12 +57,14 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
             reservations: [],
             showForm: false,
-            csrfToken: '', // Para armazenar o token CSRF
+            csrfToken: '',
             newReservation: {
                 name: '',
                 email: '',
@@ -74,68 +76,59 @@ export default {
     },
     mounted() {
         this.fetchReservations();
+        this.fetchCsrfToken();
     },
     methods: {
-        // Função para obter o token CSRF
         async fetchCsrfToken() {
             try {
-                const response = await fetch('http://localhost:8000/api/csrf-token');
-                const data = await response.json();
-                this.csrfToken = data.csrf_token;
+                const response = await axios.get('http://localhost:8000/api/csrf-token', {
+                   withCredentials: true, 
+                });
+                this.csrfToken = response.data.csrf_token;
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
             }
         },
 
-        // Função para buscar as reservas
         async fetchReservations() {
             try {
-                const response = await fetch('/api/reservations');
-                this.reservations = await response.json();
+                const response = await axios.get('/api/reservations');
+                this.reservations = response.data;
             } catch (error) {
                 console.error('Error fetching reservations:', error);
             }
         },
 
-        // Função para adicionar uma nova reserva
         async addReservation() {
             try {
-
-                // Primeiro, obtenha o token CSRF
                 if (!this.csrfToken) {
                     await this.fetchCsrfToken();
                 }
 
                 // Enviar a requisição de POST
-                const response = await fetch('http://127.0.0.1:8000/api/reservations', {
-                    method: 'POST',
+                const response = await axios.post('http://127.0.0.1:8000/api/reservations', this.newReservation, {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': this.csrfToken,  // Enviar o token CSRF aqui
-                        'Accept': 'application/json',    // Assegura que o Laravel reconheça o formato da requisição
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
                     },
-                    body: JSON.stringify(this.newReservation),
+                    withCredentials: true,
                 });
 
-                console.log(response.ok);
-
-
-                if (response.ok) {
-                    this.newReservation = { name: '', email: '', date: '', time: '', number_of_guests: '' }; // Limpa o formulário
-                    this.showForm = false; // Fecha o formulário
-                    this.fetchReservations(); // Recarrega as reservas
+                if (response.status === 200) {
+                    this.newReservation = { name: '', email: '', date: '', time: '', number_of_guests: '' };
+                    this.showForm = false;
+                    this.fetchReservations();
                 } else {
                     console.error('Failed to add reservation:', response.statusText);
                 }
             } catch (error) {
                 console.error('Error adding reservation:', error);
-    }
-}
-
+            }
+        }
     },
 };
 </script>
 
+
 <style scoped>
-/* Estilo opcional para o componente */
 </style>

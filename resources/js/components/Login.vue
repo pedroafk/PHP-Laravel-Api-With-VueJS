@@ -29,6 +29,13 @@
                 </button>
             </form>
             <p v-if="errorMessage" class="mt-4 text-red-500 text-sm text-center">{{ errorMessage }}</p>
+            <div class="mt-4 text-center">
+                <router-link to="/register">
+                    <button class="w-full bg-green-600 text-white font-bold py-2 rounded-md hover:bg-green-700 transition duration-200">
+                        Criar Cadastro
+                    </button>
+                </router-link>
+            </div>
         </div>
     </div>
 </template>

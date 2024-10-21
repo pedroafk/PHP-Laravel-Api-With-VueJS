@@ -2,9 +2,11 @@ import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import ReservationsTable from './components/ReservationsTable.vue';
 import Login from './components/Login.vue';
+import Register from './components/Register.vue';
 
 const routes = [
     { path: '/login', component: Login },
+    { path: '/register', component: Register },
     { path: '/reservations', component: ReservationsTable, meta: { requiresAuth: true } },
 ];
 

@@ -8,6 +8,7 @@ Route::get('api/csrf-token', [ReservationController::class, 'getCsrfToken'])->mi
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
+
 Route::middleware('web')->group(function () {
     Route::get('api/reservations', [ReservationController::class, 'index']);
     Route::get('api/reservations/{id}', [ReservationController::class, 'show']);
@@ -19,6 +20,7 @@ Route::middleware('web')->group(function () {
 Route::get('/login', function () {
     return view('welcome');
 })->name('login');
+
 
 Route::get('/reservations', function () {
     return view('reservations');

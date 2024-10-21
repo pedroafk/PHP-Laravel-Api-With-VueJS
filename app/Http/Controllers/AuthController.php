@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
-    // Método de registro
     public function register(Request $request)
     {
         // Validação dos dados de entrada
@@ -32,6 +31,7 @@ class AuthController extends Controller
         // Retornar uma resposta JSON
         return response()->json(['message' => 'Usuário registrado com sucesso', 'user' => $user], 201);
     }
+
 
     public function login(Request $request)
     {

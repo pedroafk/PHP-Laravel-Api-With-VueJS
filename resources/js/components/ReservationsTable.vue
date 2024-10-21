@@ -6,7 +6,6 @@
         <div v-if="showForm" class="mb-4 p-4 border border-gray-300 rounded">
             <h3 class="text-lg font-semibold mb-2">Add New Reservation</h3>
             <form @submit.prevent="addReservation" method="POST">
-                @csrf
                 <div class="mb-2">
                     <label for="name" class="block">Name:</label>
                     <input type="text" v-model="newReservation.name" required class="border rounded w-full py-2 px-3">
@@ -86,7 +85,6 @@ export default {
                     withCredentials: true,
                 });
                 this.csrfToken = response.data.csrf_token;
-                console.log('CSRF Token:', this.csrfToken); // Log do CSRF Token
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
             }
@@ -98,7 +96,6 @@ export default {
                     withCredentials: true
                 });
                 this.reservations = response.data;
-                console.log('Fetched reservations:', this.reservations); // Log das reservas
             } catch (error) {
                 console.error('Error fetching reservations:', error);
             }
@@ -109,11 +106,10 @@ export default {
 
             try {
                 if (!this.csrfToken) {
-                    console.log('CSRF token is missing, fetching...'); // Log se o CSRF Token não estiver disponível
                     await this.fetchCsrfToken();
                 }
 
-                // Enviar a requisição de POST
+                
                 const response = await axios.post('http://127.0.0.1:8000/api/reservations', this.newReservation, {
                     headers: {
                         'X-CSRF-TOKEN': this.csrfToken,
@@ -122,7 +118,7 @@ export default {
                     withCredentials: true,
                 });
 
-                console.log('Response:', response); // Log da resposta
+                console.log('Response:', response);
 
                 if (response.status === 200) {
                     this.newReservation = { name: '', email: '', date: '', time: '', number_of_guests: '' };
@@ -132,7 +128,7 @@ export default {
                     console.error('Failed to add reservation:', response.statusText);
                 }
             } catch (error) {
-                console.log('Full error object:', error); // Log do objeto de erro completo
+                console.log('Full error object:', error);
             }
         }
     },

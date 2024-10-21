@@ -64,9 +64,9 @@ export default {
             name: '',
             email: '',
             password: '',
-            passwordConfirmation: '', // Adicione esta variável
+            passwordConfirmation: '',
             errorMessage: '',
-            errors: [] // Para armazenar erros de validação
+            errors: [] 
         };
     },
     methods: {
@@ -75,20 +75,19 @@ export default {
             name: this.name,
             email: this.email,
             password: this.password,
-            password_confirmation: this.passwordConfirmation, // Inclua a confirmação da senha
+            password_confirmation: this.passwordConfirmation,
         };
-        console.log('Dados enviados:', payload); // Verifique os dados aqui
+        console.log('Dados enviados:', payload);
 
         axios.post('http://127.0.0.1:8000/register', payload)
             .then(response => {
                 console.log('Registro realizado com sucesso!', response.data);
-                // Redirecionar para a página de login após o cadastro bem-sucedido
-                this.$router.push('/login'); // Altere para o caminho da sua rota de login
+                this.$router.push('/login');
             })
             .catch(error => {
                 if (error.response) {
-                    console.log('Erro:', error.response.data); // Verifique a resposta de erro aqui
-                    this.errors = error.response.data.errors; // Capture os erros
+                    console.log('Erro:', error.response.data);
+                    this.errors = error.response.data.errors;
                 } else {
                     console.log('Erro de rede:', error);
                 }
